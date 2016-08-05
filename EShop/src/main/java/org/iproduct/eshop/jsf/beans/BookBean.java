@@ -5,6 +5,7 @@
  */
 package org.iproduct.eshop.jsf.beans;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.New;
@@ -26,7 +27,11 @@ public class BookBean {
     /**
      * Creates a new instance of Book
      */
-    public BookBean() {
+    public BookBean() {}
+    
+    @PostConstruct
+    public void init() {
+        book.getAuthors().add("");
     }
 
     public Book getBook() {
