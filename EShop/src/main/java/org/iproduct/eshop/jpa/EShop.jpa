@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" v="1.5.4" xs="false" id="_14701260837461" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd">
+    <jpa:entity xre="false" sm="false" abs="false" class="Book" visibile="true" minimized="false" rootElement="_14701260837461" id="_1470126091421">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="name" id="_14701278986344">
+                <jpa:column unique="false" nullable="false" insertable="true" updatable="true" length="255"/>
+            </basic>
+            <basic attribute-type="String" visibile="true" name="isbn" id="_14701280306895"/>
+            <basic attribute-type="double" visibile="true" name="price" id="_14701281663848"/>
+            <basic attribute-type="boolean" visibile="true" name="onsale" id="_14701282049759"/>
+            <basic attribute-type="double" visibile="true" name="percentage_off" id="_147012830695010"/>
+            <basic attribute-type="String" visibile="true" name="description" id="_147012847464611">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="1024"/>
+            </basic>
+            <basic attribute-type="String" visibile="true" name="photo_url" id="_147012857802912"/>
+            <basic attribute-type="String" visibile="true" name="book_url" id="_147012862364413"/>
+            <many-to-many own="true" collection-type="java.util.List" connected-entity-id="_1470128654120" connected-attribute-id="_147012877777819" visibile="true" name="publishers" id="_147012877775518"/>
+            <element-collection target-class="java.lang.String" collection-type="java.util.List" visibile="true" name="author" id="_14701281000407"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_14701260915522">
+                <jpa:generated-value/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity xre="false" sm="false" abs="false" class="Publisher" visibile="true" minimized="false" rootElement="_14701260837461" id="_1470128654120">
+        <jpa:attributes>
+            <basic attribute-type="String" visibile="true" name="name" id="_147012869526016"/>
+            <basic attribute-type="String" visibile="true" name="url" id="_147012870539617"/>
+            <many-to-many collection-type="java.util.List" connected-entity-id="_1470126091421" connected-attribute-id="_147012877775518" visibile="true" name="books" id="_147012877777819"/>
+            <jpa:id attribute-type="Long" visibile="true" name="id" id="_147012865412114">
+                <jpa:generated-value/>
+            </jpa:id>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:c>
+        <ct>java.util.List</ct>
+        <ct>java.util.Set</ct>
+        <ct>java.util.Collection</ct>
+    </jpa:c>
+    <jpa:diagram>
+        <plane elementRef="_14701260837461">
+            <shape elementRef="_1470126091421">
+                <Bounds x="390.0" y="185.0" width="132.0" height="294.0"/>
+            </shape>
+            <shape elementRef="_1470128654120">
+                <Bounds x="123.0" y="332.0" width="150.0" height="147.0"/>
+            </shape>
+        </plane>
+    </jpa:diagram>
+</jpa:entity-mappings>

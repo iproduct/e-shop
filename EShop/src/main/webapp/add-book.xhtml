@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./template.xhtml">
+
+            <ui:define name="content">
+                <div class="add-book container">
+                    <h2>
+                        Add New Book
+                    </h2>
+                    <h:form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="title" class="control-label col-sm-2">Book Title:</label>
+                            <div class="col-sm-10">
+                                <h:inputText label="Title" id="title" value="#{bookBean.book.title}" class="form-control">
+                                    <f:validateRequired />
+                                </h:inputText> 
+                                <h:message for="title" showDetail="true" showSummary="false" style="color:red;"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="isbn" class="control-label col-sm-2">ISBN:</label>
+                            <div class="col-sm-10">
+                                <h:inputText label="ISBN" id="isbn" value="#{bookBean.book.isbn}" class="form-control">
+                                    <f:validateRegex pattern="(\d{3}-)?\d{10}" />
+                                </h:inputText> 
+                                <h:message for="isbn" showDetail="true" showSummary="false" style="color:red;"/>
+                                <h:commandButton action="#{bookBean.addBook}" />
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

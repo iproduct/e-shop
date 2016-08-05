@@ -1,0 +1,21 @@
+
+#bottom {
+    position: relative;
+    background-color: #c2dfef;
+    padding: 5px;
+    margin: 10px 0px 0px 0px;
+}
+
+header a:link, header a:visited {
+  color: white;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+header a:link:hover, header a:visited:hover  {
+  color: black;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+

@@ -1,0 +1,12 @@
+.navbar {
+    margin-bottom: 0;
+}
+
+.book-list {
+    list-style-type: none;
+}
+
+.price {
+    color: green;
+    font-weight: bold;
+}
