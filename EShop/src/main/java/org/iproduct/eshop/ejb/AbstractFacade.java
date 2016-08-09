@@ -52,15 +52,16 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) {
+    public T create(T entity) {
         getEntityManager().persist(entity);
+        return entity;
     }
 
-    public void edit(T entity) throws NonexistentEntityException {
-        getEntityManager().merge(entity);
+    public T edit(T entity) {
+        return getEntityManager().merge(entity);
     }
 
-    public void remove(long entityId) throws NonexistentEntityException {
+    public T remove(long entityId) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
         T entity = em.find(entityClass, entityId);
         if (entity == null) {
@@ -69,6 +70,7 @@ public abstract class AbstractFacade<T> {
                     + entityId + " no longer exists.");
         }
         em.remove(entity);
+        return entity;
     }
     
     public T findById(long entityId) {

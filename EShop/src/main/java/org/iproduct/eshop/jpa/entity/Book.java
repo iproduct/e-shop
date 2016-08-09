@@ -35,7 +35,7 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "book_gen")
     @Column(unique = false, updatable = true, insertable = true, nullable = true, length = 255, scale = 0, precision = 0)
     private Long id;
-    
+
     @Column(unique = false, updatable = true, insertable = true, nullable = false, length = 255, scale = 0, precision = 0)
     @Basic
     private String title;
@@ -50,7 +50,7 @@ public class Book implements Serializable {
 
     @Column(unique = false, updatable = true, insertable = true, nullable = true, length = 255, scale = 0, precision = 0)
     @ElementCollection
-    private List<String> author;
+    private List<String> authors = new ArrayList<>();
 
     @Column(unique = false, updatable = true, insertable = true, nullable = true, length = 255, scale = 0, precision = 0)
     @Basic
@@ -64,7 +64,7 @@ public class Book implements Serializable {
     @Basic
     private String description;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, targetEntity = Publisher.class)
+    @ManyToOne(targetEntity = Publisher.class)
     private Publisher publisher;
 
     @Column(unique = false, updatable = true, insertable = true, nullable = true, length = 255, scale = 0, precision = 0)
@@ -80,24 +80,24 @@ public class Book implements Serializable {
 
     public Book(String title, String author, Publisher publisher, double price) {
         this.price = price;
-        this.author = new ArrayList<>();
-        this.author.add(author);
+        this.authors = new ArrayList<>();
+        this.authors.add(author);
         this.title = title;
         this.publisher = publisher;
     }
 
-    public Book( String title, String[] authors, Publisher publisher, double price) {
+    public Book(String title, String[] authors, Publisher publisher, double price) {
         this.price = price;
-        this.author = Arrays.asList(authors);
+        this.authors = Arrays.asList(authors);
         this.title = title;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String[] authors, String description, 
+    public Book(String title, String isbn, String[] authors, String description,
             Publisher publisher, String photoUrl, String bookUrl, double price, double percentage_off) {
         this.percentage_off = percentage_off;
         this.price = price;
-        this.author = Arrays.asList(authors);
+        this.authors = Arrays.asList(authors);
         this.isbn = isbn;
         this.title = title;
         this.book_url = bookUrl;
@@ -107,7 +107,6 @@ public class Book implements Serializable {
         this.book_url = bookUrl;
     }
 
-    
     public double getPercentage_off() {
         return this.percentage_off;
     }
@@ -124,12 +123,12 @@ public class Book implements Serializable {
         this.price = price;
     }
 
-    public List<String> getAuthor() {
-        return this.author;
+    public List<String> getAuthors() {
+        return this.authors;
     }
 
-    public void setAuthor(List<String> author) {
-        this.author = author;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
     public String getIsbn() {
@@ -164,11 +163,12 @@ public class Book implements Serializable {
         this.description = description;
     }
 
-    public Publisher getPublishers() {
+    public Publisher getPublisher() {
         return this.publisher;
     }
 
     public void setPublisher(Publisher publisher) {
+        System.out.println("!!! Setting book publisher: " + publisher);
         this.publisher = publisher;
     }
 
@@ -198,6 +198,6 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "Book{" + "percentage_off=" + percentage_off + ", price=" + price + ", author=" + author + ", isbn=" + isbn + ", title=" + title + ", book_url=" + book_url + ", description=" + description + ", publisher=" + publisher + ", id=" + id + ", onsale=" + onsale + ", photo_url=" + photo_url + '}';
+        return "Book{" + "percentage_off=" + percentage_off + ", price=" + price + ", author=" + authors + ", isbn=" + isbn + ", title=" + title + ", book_url=" + book_url + ", description=" + description + ", publisher=" + publisher + ", id=" + id + ", onsale=" + onsale + ", photo_url=" + photo_url + '}';
     }
 }

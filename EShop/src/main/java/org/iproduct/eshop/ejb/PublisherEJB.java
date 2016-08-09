@@ -26,59 +26,54 @@
  */
 package org.iproduct.eshop.ejb;
 
-import javax.ejb.EJB;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
-import org.iproduct.eshop.jpa.entity.Book;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.iproduct.eshop.jpa.entity.Publisher;
-
+import org.iproduct.eshop.jpa.entity.Publisher_;
 
 /**
- * 
+ *
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
-
 @Stateless
-public class BookEJB extends AbstractFacade<Book>{
-    
+public class PublisherEJB extends AbstractFacade<Publisher> {
+
     @PersistenceContext
     private EntityManager em;
-    
-    @EJB 
-    PublisherEJB publisherController;
 
-    public BookEJB() {
-        super(Book.class);
+    public PublisherEJB() {
+        super(Publisher.class);
     }
-   
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }    
-
-    
-    @Override
-    public Book create(Book book) {
-        Publisher publisher = book.getPublisher(),
-            existingPublisher = null;
-        
-        if(publisher.getId()!= null) {
-            existingPublisher = publisherController.findById(publisher.getId());
-        } 
-        if(existingPublisher == null) {  
-            existingPublisher = publisherController.findByName(publisher.getName());
-//            System.out.println("Found by name: " + existingPublisher);
-        }
-        if(existingPublisher == null) {
-            existingPublisher = publisherController.create(publisher);
-        }
-//        System.out.println("To be set: " + existingPublisher);
-        book.setPublisher(existingPublisher);
-        return super.create(book);
     }
-    
-    
+
+    public Publisher findByName(String name) {
+        name = name.trim();
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = builder.createQuery();
+        Root<Publisher> publisherRoot = criteriaQuery.from(Publisher.class);
+        criteriaQuery.where(builder.equal(
+            publisherRoot.get(Publisher_.name),  
+            builder.parameter(String.class, "name")));
+        
+        //Escaping "name" parameter automatically
+        Query query = em.createQuery(criteriaQuery).setParameter("name", name);
+        List<Publisher> publishers = query.getResultList();
+        if (publishers.size() > 0) {
+            return publishers.get(0);
+        } else {
+            return null;
+        }
+    }
+
 }

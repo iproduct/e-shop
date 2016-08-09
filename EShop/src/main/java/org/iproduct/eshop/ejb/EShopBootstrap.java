@@ -7,6 +7,7 @@ package org.iproduct.eshop.ejb;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
@@ -24,6 +25,9 @@ public class EShopBootstrap {
 
     @PersistenceContext
     private EntityManager em;
+    
+    @EJB
+    BookEJB bookController;
 
     @PostConstruct
     public void init() {
@@ -34,7 +38,7 @@ public class EShopBootstrap {
             "JavaServer Faces (JSF) is the standard Java EE technology for building web user interfaces. It provides a powerful framework for developing server-side applications, allowing you to cleanly separate visual presentation and application logic. JSF 2.0 is a major upgrade, which not only adds many useful features but also greatly simplifies the programming model by using annotations and “convention over configuration” for common tasks.", 
             p1, "https://images-na.ssl-images-amazon.com/images/I/51FMWNAMAgL._SX359_BO1,204,203,200_.jpg", 
             "http://corejsf.com/", 35, .1);
-        em.persist(b1);
+        bookController.create(b1);
         System.out.println("\nPublishers:");
         List<Publisher> publishers = em.createQuery("SELECT p FROM Publisher p")
                 .getResultList();

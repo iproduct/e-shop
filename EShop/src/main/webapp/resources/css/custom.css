@@ -2,6 +2,10 @@
     margin-bottom: 0;
 }
 
+.navbar .logo{
+    padding-top: 0;
+}
+
 .book-list {
     list-style-type: none;
 }
@@ -9,4 +13,8 @@
 .price {
     color: green;
     font-weight: bold;
+}
+
+.author {
+    margin-bottom: 5px;
 }

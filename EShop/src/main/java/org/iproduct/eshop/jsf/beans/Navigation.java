@@ -6,8 +6,8 @@
 package org.iproduct.eshop.jsf.beans;
 
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
  * @author admin
  */
 @Named(value = "navigation")
-@SessionScoped
+@RequestScoped
 public class Navigation implements Serializable {
 
     /**

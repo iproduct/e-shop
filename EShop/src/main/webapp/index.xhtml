@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div class="authors">
-                                    <ui:repeat value="#{currentBook.author}" var="author" varStatus="authorSatus">
+                                    <ui:repeat value="#{currentBook.authors}" var="author" varStatus="authorSatus">
                                         <span>
                                             <h:outputText escape="true" value="#{author}#{ (!authorSatus.last) ? ', ' : '' }" />
                                         </span>
