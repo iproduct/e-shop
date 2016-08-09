@@ -17,7 +17,6 @@ import javax.enterprise.inject.New;
 import javax.inject.Inject;
 import org.iproduct.eshop.ejb.BookEJB;
 import org.iproduct.eshop.ejb.PublisherEJB;
-import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
 
