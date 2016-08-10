@@ -39,6 +39,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
@@ -59,19 +60,27 @@ public class Groups implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
+    @TableGenerator(name = "groups_gen",
+            table = "id_gen",
+            pkColumnName = "GEN_KEY",
+            valueColumnName = "GEN_VALUE",
+            pkColumnValue = "groups_id",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "groups_gen")
     @Basic(optional = false)
-    @Column(name = "ID")
-    private Integer id;
+    @Column(name = "ID", unique = true, updatable = false, insertable = true, nullable = false)
+    protected Long id;
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50, message="{groups.name}")
+    @Size(min = 1, max = 40, message="{group.name}")
     @Column(name = "NAME")
     private String name;
     
-    @Size(max = 300, message="{groups.description}")
+    @Size(max = 256, message="{group.description}")
     @Column(name = "DESCRIPTION")
     private String description;
     
@@ -82,20 +91,20 @@ public class Groups implements Serializable {
     public Groups() {
     }
 
-    public Groups(Integer id) {
+    public Groups(Long id) {
         this.id = id;
     }
 
-    public Groups(Integer id, String name) {
+    public Groups(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
