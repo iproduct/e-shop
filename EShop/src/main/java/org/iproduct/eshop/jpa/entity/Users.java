@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByEmail", query = "SELECT p FROM Users p WHERE p.email = :email"),
     @NamedQuery(name = "Users.findByAddress", query = "SELECT p FROM Users p WHERE p.address = :address"),
     @NamedQuery(name = "Users.findByCity", query = "SELECT p FROM Users p WHERE p.city = :city")})
-public class Users implements Serializable {
+public class Users implements Serializable, Identifiable {
     private static final long serialVersionUID = 1L;
     
     @TableGenerator(name = "users_gen",

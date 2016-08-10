@@ -24,15 +24,10 @@
  * "Portions Copyright [year] [name of copyright owner]"
  *
  */
-package org.iproduct.eshop.ejb;
+package org.iproduct.eshop.jsf.utils;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
-import org.iproduct.eshop.jpa.entity.Book;
-import org.iproduct.eshop.jpa.entity.Publisher;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -41,31 +36,20 @@ import org.iproduct.eshop.jpa.entity.Publisher;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 
-@Stateless
-public class BookEJB extends AbstractFacade<Book>{
-    
-    @PersistenceContext
-    private EntityManager em;
-    
-    @EJB 
-    PublisherEJB publisherController;
-
-    public BookEJB() {
-        super(Book.class);
+public class JsfUtils {
+    public void addSuccessMessage(String summary, String detail) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage("success", msg);
     }
-   
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
+            
+    public void addWarningMessage(String summary, String detail) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, detail);
+        FacesContext.getCurrentInstance().addMessage("warning", msg);
     }
-    
-    @Override
-    public Book create(Book book) throws PreexistingEntityException {
-        Publisher publisher = book.getPublisher();
-        publisher = publisherController.create(publisher);
-        book.setPublisher(publisher);
-        return super.create(book);
+            
+    public void addErrorMessage(String summary, String detail) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage("error", msg);
     }
-    
-    
+            
 }

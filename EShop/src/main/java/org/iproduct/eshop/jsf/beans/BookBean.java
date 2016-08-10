@@ -17,6 +17,7 @@ import javax.enterprise.inject.New;
 import javax.inject.Inject;
 import org.iproduct.eshop.ejb.BookEJB;
 import org.iproduct.eshop.ejb.PublisherEJB;
+import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
 
@@ -75,7 +76,12 @@ public class BookBean implements Serializable {
         if (!conversation.isTransient()) {
             conversation.end();
         }
-        bookController.create(book);
+        try {
+            bookController.create(book);
+        } catch (PreexistingEntityException ex) {
+            Logger.getLogger(BookBean.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
         return "index";
     }
 

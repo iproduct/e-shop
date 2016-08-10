@@ -27,7 +27,6 @@
 
 package org.iproduct.eshop.jpa.entity;
 
-import java.util.ArrayList;
 import javax.persistence.Entity;
 
 /**

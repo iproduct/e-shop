@@ -24,48 +24,14 @@
  * "Portions Copyright [year] [name of copyright owner]"
  *
  */
-package org.iproduct.eshop.ejb;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
-import org.iproduct.eshop.jpa.entity.Book;
-import org.iproduct.eshop.jpa.entity.Publisher;
-
+package org.iproduct.eshop.jpa.entity;
 
 /**
  * 
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
-
-@Stateless
-public class BookEJB extends AbstractFacade<Book>{
-    
-    @PersistenceContext
-    private EntityManager em;
-    
-    @EJB 
-    PublisherEJB publisherController;
-
-    public BookEJB() {
-        super(Book.class);
-    }
-   
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
-    @Override
-    public Book create(Book book) throws PreexistingEntityException {
-        Publisher publisher = book.getPublisher();
-        publisher = publisherController.create(publisher);
-        book.setPublisher(publisher);
-        return super.create(book);
-    }
-    
-    
+public interface Identifiable {
+    Long getId();
 }

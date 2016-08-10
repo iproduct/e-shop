@@ -27,6 +27,7 @@
 package org.iproduct.eshop.ejb;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,64 +36,69 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
-import org.iproduct.eshop.jpa.entity.Publisher;
-import org.iproduct.eshop.jpa.entity.Publisher_;
+import org.iproduct.eshop.jpa.entity.Groups;
+import org.iproduct.eshop.jpa.entity.Groups;
+import org.iproduct.eshop.jpa.entity.Groups_;
+
 
 /**
- *
+ * 
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
-@Stateless
-public class PublisherEJB extends AbstractFacade<Publisher> {
 
+@Stateless
+public class GroupEJB extends AbstractFacade<Groups>{
+    
     @PersistenceContext
     private EntityManager em;
+    
+    @EJB 
+    PublisherEJB publisherController;
 
-    public PublisherEJB() {
-        super(Publisher.class);
+    public GroupEJB() {
+        super(Groups.class);
     }
-
+   
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     @Override
-    public Publisher create(Publisher publisher) throws PreexistingEntityException {
-        Publisher existingPublisher = null;
+    public Groups create(Groups group) throws PreexistingEntityException {
+        Groups existingGroup = null;
         
-        if(publisher.getId()!= null) {
-            existingPublisher = findById(publisher.getId());
+        if(group.getId()!= null) {
+            existingGroup = findById(group.getId());
         } 
-        if(existingPublisher == null) {  
-            existingPublisher = findByName(publisher.getName());
-//            System.out.println("Found by name: " + existingPublisher);
+        if(existingGroup == null) {  
+            existingGroup = findByEmail(group.getName());
+//            System.out.println("Found by name: " + existingGroup);
         }
-        if(existingPublisher == null) {
-            existingPublisher = super.create(publisher);
+        if(existingGroup == null) {
+            existingGroup = super.create(group);
         }
-//        System.out.println("To be set: " + existingPublisher);
-        return existingPublisher; 
+//        System.out.println("To be set: " + existingGroup);
+        return existingGroup;
     }
 
-    public Publisher findByName(String name) {
-        name = name.trim();
+    public Groups findByEmail(String email) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery criteriaQuery = builder.createQuery();
-        Root<Publisher> publisherRoot = criteriaQuery.from(Publisher.class);
+        Root<Groups> groupsRoot = criteriaQuery.from(Groups.class);
         criteriaQuery.where(builder.equal(
-            publisherRoot.get(Publisher_.name),  
-            builder.parameter(String.class, "name")));
+            groupsRoot.get(Groups_.name),  
+            builder.parameter(String.class, "email")));
         
         //Escaping "name" parameter automatically
-        Query query = em.createQuery(criteriaQuery).setParameter("name", name);
-        List<Publisher> publishers = query.getResultList();
+        Query query = em.createQuery(criteriaQuery).setParameter("email", email);
+        List<Groups> publishers = query.getResultList();
         if (publishers.size() > 0) {
             return publishers.get(0);
         } else {
             return null;
         }
     }
-
+      
 }

@@ -56,7 +56,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Groups.findById", query = "SELECT g FROM Groups g WHERE g.id = :id"),
     @NamedQuery(name = "Groups.findByName", query = "SELECT g FROM Groups g WHERE g.name = :name"),
     @NamedQuery(name = "Groups.findByDescription", query = "SELECT g FROM Groups g WHERE g.description = :description")})
-public class Groups implements Serializable {
+public class Groups implements Serializable, Identifiable {
     
     private static final long serialVersionUID = 1L;
     

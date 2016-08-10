@@ -27,6 +27,8 @@
 package org.iproduct.eshop.ejb;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -35,41 +37,71 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
+import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Users;
 import org.iproduct.eshop.jpa.entity.Users_;
 
-
 /**
- * 
+ *
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
-
 @Stateless
-public class UserEJB extends AbstractFacade<Users>{
-    
+public class UserEJB extends AbstractFacade<Users> {
+
     @PersistenceContext
     private EntityManager em;
-    
-    @EJB 
-    PublisherEJB publisherController;
+
+    @EJB
+    UserEJB userController;
 
     public UserEJB() {
         super(Users.class);
     }
-   
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     @Override
-    public Users create(Users user) {
-        Users existingUser = findByEmail(user.getEmail());
-    
+    public Users create(Users user) throws PreexistingEntityException {
+        Users existingUser = null;
+
+        if (user.getId() != null) {
+            existingUser = findById(user.getId());
+        }
+        if (existingUser == null) {
+            existingUser = findByEmail(user.getEmail());
+//            System.out.println("Found by name: " + existingUser);
+        }
         if (existingUser == null) {
             existingUser = super.create(user);
         }
+//        System.out.println("To be set: " + existingUser);
+        return existingUser;
+    }
+
+    @Override
+    public Users edit(Users user) {
+        Users existingUser = null;
+
+        if (user.getId() != null) {
+            existingUser = findById(user.getId());
+        }
+        if (existingUser == null) {
+            existingUser = findByEmail(user.getEmail());
+//            System.out.println("Found by name: " + existingUser);
+        }
+        if (existingUser == null) {
+            try {
+                existingUser = super.create(user);
+            } catch (PreexistingEntityException ex) {
+                Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+//        System.out.println("To be set: " + existingUser);
         return existingUser;
     }
 
@@ -78,17 +110,17 @@ public class UserEJB extends AbstractFacade<Users>{
         CriteriaQuery criteriaQuery = builder.createQuery();
         Root<Users> usersRoot = criteriaQuery.from(Users.class);
         criteriaQuery.where(builder.equal(
-            usersRoot.get(Users_.email),  
-            builder.parameter(String.class, "email")));
-        
+                usersRoot.get(Users_.email),
+                builder.parameter(String.class, "email")));
+
         //Escaping "name" parameter automatically
         Query query = em.createQuery(criteriaQuery).setParameter("email", email);
-        List<Users> publishers = query.getResultList();
-        if (publishers.size() > 0) {
-            return publishers.get(0);
+        List<Users> users = query.getResultList();
+        if (users.size() > 0) {
+            return users.get(0);
         } else {
             return null;
         }
     }
-      
+
 }

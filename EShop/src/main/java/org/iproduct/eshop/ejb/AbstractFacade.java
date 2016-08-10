@@ -33,13 +33,16 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
+import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.jpa.entity.Identifiable;
 
 /**
  *
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
+ * @param <T> type of entity managed
  */
-public abstract class AbstractFacade<T> {
+public abstract class AbstractFacade<T extends Identifiable> {
 
     private Class<T> entityClass;
 
@@ -52,12 +55,22 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public T create(T entity) {
+    public T create(T entity) throws PreexistingEntityException {
+        if(findById(entity.getId()) != null) {
+            throw new PreexistingEntityException("Entity " + entityClass.getSimpleName() 
+                    + " with ID=" + entity.getId() + " already exists.");
+        }
         getEntityManager().persist(entity);
         return entity;
     }
 
-    public T edit(T entity) {
+    public T edit(T entity){
+//        EntityManager em = getEntityManager();
+//        T existingEntity = em.find(entityClass, entity.getId());
+//        if (existingEntity == null) {
+//            throw new NonexistentEntityException("Entity " + entityClass.getSimpleName() 
+//                    + " with ID=" + entity.getId() + " does not exist.");
+//        }
         return getEntityManager().merge(entity);
     }
 

@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Orders.findByAmount", query = "SELECT o FROM Orders o WHERE o.amount = :amount"),
     @NamedQuery(name = "Orders.findByDateCreated", query = "SELECT o FROM Orders o WHERE o.dateCreated = :dateCreated")})
 @XmlRootElement(name = "Orders")
-public class Orders implements Serializable {
+public class Orders implements Serializable, Identifiable{
     
     private static final long serialVersionUID = 1L;
     
@@ -104,6 +104,7 @@ public class Orders implements Serializable {
         this.dateCreated = dateCreated;
     }
 
+    @Override
     public Long getId() {
         return id;
     }

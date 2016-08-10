@@ -50,7 +50,7 @@ import javax.validation.constraints.NotNull;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 @Entity
-public class Book implements Serializable {
+public class Book implements Serializable, Identifiable {
     private static final long serialVersionUID = 1L;
     
     @TableGenerator(name = "book_gen",

@@ -46,7 +46,7 @@ import javax.validation.constraints.NotNull;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 @Entity
-public class Publisher implements Serializable {
+public class Publisher implements Serializable, Identifiable {
     private static final long serialVersionUID = 1L;
     
     @TableGenerator(name = "publisher_gen",
