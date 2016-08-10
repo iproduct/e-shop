@@ -66,20 +66,11 @@ public class UserEJB extends AbstractFacade<Users> {
 
     @Override
     public Users create(Users user) throws PreexistingEntityException {
-        Users existingUser = null;
-
-        if (user.getId() != null) {
-            existingUser = findById(user.getId());
+        if (user.getEmail() != null && findByEmail(user.getEmail()) != null) {
+            throw new PreexistingEntityException("User with email: "
+                    + user.getEmail() + " already exists.");
         }
-        if (existingUser == null) {
-            existingUser = findByEmail(user.getEmail());
-//            System.out.println("Found by name: " + existingUser);
-        }
-        if (existingUser == null) {
-            existingUser = super.create(user);
-        }
-//        System.out.println("To be set: " + existingUser);
-        return existingUser;
+        return super.create(user);
     }
 
     @Override
