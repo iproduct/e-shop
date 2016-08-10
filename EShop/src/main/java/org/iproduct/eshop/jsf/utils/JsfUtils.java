@@ -37,19 +37,19 @@ import javax.faces.context.FacesContext;
  */
 
 public class JsfUtils {
-    public void addSuccessMessage(String summary, String detail) {
+    public static void addSuccessMessage(String summary, String detail) {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage("success", msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
             
-    public void addWarningMessage(String summary, String detail) {
+    public static void addWarningMessage(String summary, String detail) {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, summary, detail);
-        FacesContext.getCurrentInstance().addMessage("warning", msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
             
-    public void addErrorMessage(String summary, String detail) {
+    public static void addErrorMessage(String summary, String detail) {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage("error", msg);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
             
 }

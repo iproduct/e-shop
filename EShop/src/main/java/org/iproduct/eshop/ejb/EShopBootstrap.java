@@ -32,13 +32,13 @@ public class EShopBootstrap {
     @PostConstruct
     public void init() {
 //        em.persist(new Publisher("AddisonWesley", "https://www.pearsonhighered.com/"));
-        Publisher p1 = new Publisher("Prentice Hall", "http://www.prenticehall.com/");
-        Book b1 = new Book("Core JavaServer Faces (3rd Edition)", "978-0137012893",
-            new String[]{"David Geary",  "Cay S. Horstmann"}, 
-            "JavaServer Faces (JSF) is the standard Java EE technology for building web user interfaces. It provides a powerful framework for developing server-side applications, allowing you to cleanly separate visual presentation and application logic. JSF 2.0 is a major upgrade, which not only adds many useful features but also greatly simplifies the programming model by using annotations and “convention over configuration” for common tasks.", 
-            p1, "https://images-na.ssl-images-amazon.com/images/I/51FMWNAMAgL._SX359_BO1,204,203,200_.jpg", 
-            "http://corejsf.com/", 35, .1);
-        bookController.create(b1);
+//        Publisher p1 = new Publisher("Prentice Hall", "http://www.prenticehall.com/");
+//        Book b1 = new Book("Core JavaServer Faces (3rd Edition)", "978-0137012893",
+//            new String[]{"David Geary",  "Cay S. Horstmann"}, 
+//            "JavaServer Faces (JSF) is the standard Java EE technology for building web user interfaces. It provides a powerful framework for developing server-side applications, allowing you to cleanly separate visual presentation and application logic. JSF 2.0 is a major upgrade, which not only adds many useful features but also greatly simplifies the programming model by using annotations and “convention over configuration” for common tasks.", 
+//            p1, "https://images-na.ssl-images-amazon.com/images/I/51FMWNAMAgL._SX359_BO1,204,203,200_.jpg", 
+//            "http://corejsf.com/", 35, .1);
+//        bookController.create(b1);
         System.out.println("\nPublishers:");
         List<Publisher> publishers = em.createQuery("SELECT p FROM Publisher p")
                 .getResultList();

@@ -60,20 +60,32 @@ public class PublisherEJB extends AbstractFacade<Publisher> {
 
     @Override
     public Publisher create(Publisher publisher) throws PreexistingEntityException {
+        if (publisher.getName() != null && findByName(publisher.getName()) != null) {
+            throw new PreexistingEntityException("Publisher with name "
+                    + publisher.getName() + " already exists.");
+        }
+        return super.create(publisher);
+    }
+
+    @Override
+    public Publisher edit(Publisher publisher) {
         Publisher existingPublisher = null;
-        
-        if(publisher.getId()!= null) {
+
+        if (publisher.getId() != null) {
             existingPublisher = findById(publisher.getId());
-        } 
-        if(existingPublisher == null) {  
+        }
+        if (existingPublisher == null) {
             existingPublisher = findByName(publisher.getName());
 //            System.out.println("Found by name: " + existingPublisher);
         }
-        if(existingPublisher == null) {
-            existingPublisher = super.create(publisher);
+        if (existingPublisher != null) {
+            existingPublisher.setName(publisher.getName());
+            existingPublisher.setUrl(publisher.getUrl());
+        } else {
+            existingPublisher = publisher;
         }
 //        System.out.println("To be set: " + existingPublisher);
-        return existingPublisher; 
+        return super.edit(existingPublisher); //To change body of generated methods, choose Tools | Templates.
     }
 
     public Publisher findByName(String name) {
@@ -82,9 +94,9 @@ public class PublisherEJB extends AbstractFacade<Publisher> {
         CriteriaQuery criteriaQuery = builder.createQuery();
         Root<Publisher> publisherRoot = criteriaQuery.from(Publisher.class);
         criteriaQuery.where(builder.equal(
-            publisherRoot.get(Publisher_.name),  
-            builder.parameter(String.class, "name")));
-        
+                publisherRoot.get(Publisher_.name),
+                builder.parameter(String.class, "name")));
+
         //Escaping "name" parameter automatically
         Query query = em.createQuery(criteriaQuery).setParameter("name", name);
         List<Publisher> publishers = query.getResultList();

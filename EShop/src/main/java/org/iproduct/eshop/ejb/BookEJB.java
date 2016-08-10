@@ -62,7 +62,7 @@ public class BookEJB extends AbstractFacade<Book>{
     @Override
     public Book create(Book book) throws PreexistingEntityException {
         Publisher publisher = book.getPublisher();
-        publisher = publisherController.create(publisher);
+        publisher = publisherController.edit(publisher);
         book.setPublisher(publisher);
         return super.create(book);
     }

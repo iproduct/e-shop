@@ -20,6 +20,7 @@ import org.iproduct.eshop.ejb.PublisherEJB;
 import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
+import org.iproduct.eshop.jsf.utils.JsfUtils;
 
 /**
  *
@@ -80,7 +81,7 @@ public class BookBean implements Serializable {
             bookController.create(book);
         } catch (PreexistingEntityException ex) {
             Logger.getLogger(BookBean.class.getName()).log(Level.SEVERE, null, ex);
-            
+            JsfUtils.addErrorMessage(ex.getMessage(), ex.getMessage());
         }
         return "index";
     }

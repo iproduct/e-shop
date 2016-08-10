@@ -56,7 +56,7 @@ public abstract class AbstractFacade<T extends Identifiable> {
     protected abstract EntityManager getEntityManager();
 
     public T create(T entity) throws PreexistingEntityException {
-        if(findById(entity.getId()) != null) {
+        if(entity.getId() != null && findById(entity.getId()) != null) {
             throw new PreexistingEntityException("Entity " + entityClass.getSimpleName() 
                     + " with ID=" + entity.getId() + " already exists.");
         }
