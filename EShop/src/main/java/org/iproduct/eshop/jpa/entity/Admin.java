@@ -24,48 +24,35 @@
  * "Portions Copyright [year] [name of copyright owner]"
  *
  */
-package org.iproduct.eshop.ejb;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
-import org.iproduct.eshop.jpa.entity.Book;
-import org.iproduct.eshop.jpa.entity.Publisher;
+package org.iproduct.eshop.jpa.entity;
 
+import java.util.ArrayList;
+import javax.persistence.Entity;
 
 /**
  * 
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
+@Entity
+public class Admin extends Users {
 
-@Stateless
-public class BookEJB extends AbstractFacade<Book>{
-    
-    @PersistenceContext
-    private EntityManager em;
-    
-    @EJB 
-    PublisherEJB publisherController;
+    public Admin() {}
 
-    public BookEJB() {
-        super(Book.class);
-    }
-   
     @Override
-    protected EntityManager getEntityManager() {
-        return em;
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Admin)) {
+            return false;
+        }
+        Admin other = (Admin) object;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
-    
+
     @Override
-    public Book create(Book book) {
-        Publisher publisher = book.getPublisher();
-        publisher = publisherController.create(publisher);
-        book.setPublisher(publisher);
-        return super.create(book);
+    public String toString() {
+        return "Admin{" + super.toString() + '}';
     }
-    
     
 }

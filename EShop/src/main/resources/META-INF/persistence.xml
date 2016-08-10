@@ -4,6 +4,13 @@
     <jta-data-source>jdbc/eshop</jta-data-source>
     <class>org.iproduct.eshop.jpa.entity.Book</class>
     <class>org.iproduct.eshop.jpa.entity.Publisher</class>
+    <class>org.iproduct.eshop.jpa.entity.Admin</class>
+    <class>org.iproduct.eshop.jpa.entity.Customer</class>
+    <class>org.iproduct.eshop.jpa.entity.Groups</class>
+    <class>org.iproduct.eshop.jpa.entity.OrderDetail</class>
+    <class>org.iproduct.eshop.jpa.entity.Orders</class>
+    <class>org.iproduct.eshop.jpa.entity.Seller</class>
+    <class>org.iproduct.eshop.jpa.entity.Users</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

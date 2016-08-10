@@ -27,6 +27,7 @@
 package org.iproduct.eshop.ejb;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,64 +35,60 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.iproduct.eshop.jpa.entity.Publisher;
-import org.iproduct.eshop.jpa.entity.Publisher_;
+import org.iproduct.eshop.jpa.entity.Users;
+import org.iproduct.eshop.jpa.entity.Users_;
+
 
 /**
- *
+ * 
  *
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
-@Stateless
-public class PublisherEJB extends AbstractFacade<Publisher> {
 
+@Stateless
+public class UserEJB extends AbstractFacade<Users>{
+    
     @PersistenceContext
     private EntityManager em;
+    
+    @EJB 
+    PublisherEJB publisherController;
 
-    public PublisherEJB() {
-        super(Publisher.class);
+    public UserEJB() {
+        super(Users.class);
     }
-
+   
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     @Override
-    public Publisher create(Publisher publisher) {
-        Publisher existingPublisher = null;
-        
-        if(publisher.getId()!= null) {
-            existingPublisher = findById(publisher.getId());
-        } 
-        if(existingPublisher == null) {  
-            existingPublisher = findByName(publisher.getName());
-//            System.out.println("Found by name: " + existingPublisher);
+    public Users create(Users user) {
+        Users existingUser = findByEmail(user.getEmail());
+    
+        if (existingUser == null) {
+            existingUser = super.create(user);
         }
-        if(existingPublisher == null) {
-            existingPublisher = super.create(publisher);
-        }
-//        System.out.println("To be set: " + existingPublisher);
-        return existingPublisher; 
+        return existingUser;
     }
 
-    public Publisher findByName(String name) {
-        name = name.trim();
+    public Users findByEmail(String email) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery criteriaQuery = builder.createQuery();
-        Root<Publisher> publisherRoot = criteriaQuery.from(Publisher.class);
+        Root<Users> usersRoot = criteriaQuery.from(Users.class);
         criteriaQuery.where(builder.equal(
-            publisherRoot.get(Publisher_.name),  
-            builder.parameter(String.class, "name")));
+            usersRoot.get(Users_.email),  
+            builder.parameter(String.class, "email")));
         
         //Escaping "name" parameter automatically
-        Query query = em.createQuery(criteriaQuery).setParameter("name", name);
-        List<Publisher> publishers = query.getResultList();
+        Query query = em.createQuery(criteriaQuery).setParameter("email", email);
+        List<Users> publishers = query.getResultList();
         if (publishers.size() > 0) {
             return publishers.get(0);
         } else {
             return null;
         }
     }
-
+      
 }

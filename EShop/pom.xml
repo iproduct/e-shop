@@ -12,7 +12,66 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <glassfish.embedded.version>4.0</glassfish.embedded.version>
+        <cargo.plugin.version>1.5.0</cargo.plugin.version>
+        <glassfish.domain.name>domain1</glassfish.domain.name>
+        <glassfish.home>${glassfish.home.prefix}/glassfish4</glassfish.home>
+        <integration.container.id>glassfish4x</integration.container.id>
     </properties>
+    
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <glassfish.home.prefix>c:/</glassfish.home.prefix>
+                <glassfish.executables.suffix>.bat</glassfish.executables.suffix>
+            </properties>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <glassfish.home.prefix>${user.home}</glassfish.home.prefix>
+                <glassfish.executables.suffix />
+            </properties>
+        </profile>
+        <profile>
+            <id>sdk</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <glassfish.home>${basedir}/../../../</glassfish.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>development</id>
+            <activation>
+                <file>
+                    <exists>${basedir}/../bundle</exists>
+                </file>
+            </activation>
+            <properties>
+                <glassfish.home>${glassfish.home.prefix}/glassfish4</glassfish.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>standalone</id>
+            <properties>
+                <glassfish.home>${basedir}/target/cargo/installs/glassfish</glassfish.home>
+                <cargo.maven.containerUrl>http://dlc.sun.com.edgesuite.net/glassfish/4.0/promoted/latest-glassfish.zip</cargo.maven.containerUrl>
+            </properties>
+        </profile>
+    </profiles>
     
     <dependencies>
         <dependency>
@@ -86,6 +145,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${cargo.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>false</skip>
+                    <executable>${glassfish.home}/bin/asadmin${glassfish.executables.suffix}</executable>
+                    <successCodes>
+                        <successCode>0</successCode>
+                        <successCode>1</successCode>
+                    </successCodes>
+                    <arguments>
+                        <argument>create-auth-realm</argument>
+                        <argument>--classname</argument>
+                        <argument>com.sun.enterprise.security.auth.realm.jdbc.JDBCRealm</argument>
+                        <argument>--property</argument>
+                        <argument>jaas-context=jdbcRealm:datasource-jndi='jdbc/eshop':user-table=eshop.USERS:user-name-column=email:password-column=password:group-table=eshop.GROUPS:group-table-user-name-column=name:group-name-column=name:assign-groups=CUSTOMERS,SELLERS,ADMINS:digest-algorithm=MD5</argument>
+                        <argument>eshopRealm</argument>
+                   </arguments>
+                </configuration>
+            </plugin> 
         </plugins>
     </build>
 
