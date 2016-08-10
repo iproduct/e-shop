@@ -26,6 +26,7 @@
  */
 package org.iproduct.eshop.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.jpa.entity.Groups;
 import org.iproduct.eshop.jpa.entity.Users;
 import org.iproduct.eshop.jpa.entity.Users_;
 
@@ -55,6 +57,9 @@ public class UserEJB extends AbstractFacade<Users> {
     @EJB
     UserEJB userController;
 
+    @EJB
+    GroupEJB groupController;
+
     public UserEJB() {
         super(Users.class);
     }
@@ -64,12 +69,27 @@ public class UserEJB extends AbstractFacade<Users> {
         return em;
     }
 
-    @Override
-    public Users create(Users user) throws PreexistingEntityException {
+    public Users createUser(Users user) throws PreexistingEntityException {
         if (user.getEmail() != null && findByEmail(user.getEmail()) != null) {
             throw new PreexistingEntityException("User with email: "
                     + user.getEmail() + " already exists.");
         }
+        List<Groups> existingGroups = new ArrayList<>();
+        for (Groups group : user.getGroups()) {
+            Groups foundGroup = groupController.findById(group.getId());
+            if (foundGroup != null) {
+                existingGroups.add(foundGroup);
+            } else {
+                Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, 
+                        "Group {0} does not exist when creating user {1}", 
+                        new Object[]{group, user});
+//                throw new NonexistentEntityException("Group " 
+//                        + group.getId() + ":" + group.getName() 
+//                        + " does not exist when creating user "
+//                        + user.getEmail());
+            }
+        }
+        user.setGroups(existingGroups);
         return super.create(user);
     }
 

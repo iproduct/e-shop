@@ -95,9 +95,9 @@ public class Groups implements Serializable, Identifiable {
         this.id = id;
     }
 
-    public Groups(Long id, String name) {
-        this.id = id;
+    public Groups(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public Long getId() {

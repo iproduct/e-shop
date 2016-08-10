@@ -5,15 +5,22 @@
  */
 package org.iproduct.eshop.ejb;
 
-import java.util.List;
+import static java.util.concurrent.ThreadLocalRandom.current;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.entity.Book;
-import org.iproduct.eshop.jpa.entity.Publisher;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.jpa.entity.Groups;
+import org.iproduct.eshop.jpa.entity.Users;
+import org.iproduct.eshop.jsf.utils.UserUtils;
 
 /**
  *
@@ -25,9 +32,15 @@ public class EShopBootstrap {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @EJB
     BookEJB bookController;
+
+    @EJB
+    GroupEJB groupController;
+
+    @EJB
+    UserEJB userController;
 
     @PostConstruct
     public void init() {
@@ -39,18 +52,52 @@ public class EShopBootstrap {
 //            p1, "https://images-na.ssl-images-amazon.com/images/I/51FMWNAMAgL._SX359_BO1,204,203,200_.jpg", 
 //            "http://corejsf.com/", 35, .1);
 //        bookController.create(b1);
-        System.out.println("\nPublishers:");
-        List<Publisher> publishers = em.createQuery("SELECT p FROM Publisher p")
-                .getResultList();
-        for (Publisher p : publishers) {
-            System.out.println(p);
+
+        if (groupController.getCount() == 0) {
+            Groups[] defaultGroups = {
+                new Groups("Customers", "EShop customers."),
+                new Groups("Sellers", "EShop sellers."),
+                new Groups("Admins", "EShop admins."),};
+            for (Groups g : defaultGroups) {
+                try {
+                    groupController.create(g);
+                } catch (PreexistingEntityException ex) {
+                    Logger.getLogger(EShopBootstrap.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        if (userController.getCount() == 0) {
+            Users adminUser = new Users("Admin", "Admin", "admin@eshop.com", "Sofia", "Sofia");
+            Groups adminGroup = groupController.findByName("Admins");
+            if (adminGroup != null) {
+                adminUser.getGroups().add(adminGroup);
+                adminUser.setPassword(UserUtils.getMD5Hash("admin"));
+                try {
+                    userController.create(adminUser);
+                } catch (PreexistingEntityException ex) {
+                    Logger.getLogger(EShopBootstrap.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (EJBException ex) {
+                    Throwable cause = ex.getCause();
+                    while(cause != null && !(cause instanceof ConstraintViolationException)) {
+                        cause = cause.getCause();
+                    }
+                    if (cause instanceof ConstraintViolationException){
+                    ConstraintViolationException cve = (ConstraintViolationException) cause;
+                        for (ConstraintViolation cv : cve.getConstraintViolations()) {
+                            Logger.getLogger(EShopBootstrap.class.getName()).log(Level.SEVERE,
+                                "Constaint violation: {0}: {1}", 
+                                new Object[]{cv.getMessage(), cv.getInvalidValue()} );
+                        }
+                    }
+                }
+            }
         }
 
-        System.out.println("\nBooks:");
-        List<Book> books = em.createQuery("SELECT b FROM Book b")
-                .getResultList();
-        for (Book b: books) {
-            System.out.println(b);
-        }
+//        System.out.println("\nBooks:");
+//        List<Book> books = em.createQuery("SELECT b FROM Book b")
+//                .getResultList();
+//        for (Book b: books) {
+//            System.out.println(b);
+//        }
     }
 }

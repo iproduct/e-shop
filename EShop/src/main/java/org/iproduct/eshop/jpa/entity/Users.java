@@ -92,7 +92,7 @@ public class Users implements Serializable, Identifiable {
     protected String email;
     
     @Basic(optional = false)
-    @Size(min=7, max=30, message= "{user.password}")
+    @Size(min=32, max=32, message= "{user.password}")
     @Column(name = "PASSWORD")
     protected String password;
     
@@ -112,19 +112,17 @@ public class Users implements Serializable, Identifiable {
         this.id = id;
     }
     
-    public Users(Long id, 
+    public Users( 
             String firstName, 
             String lastName, 
             String email, 
             String address, 
             String city) {
-        this.id = id;
         this.firstname = firstName;
         this.lastname = lastName;
         this.email = email;
         this.address = address;
         this.city = city;
-        this.groups = new ArrayList<>();
     }
 
     public Long getId() {

@@ -67,32 +67,23 @@ public class GroupEJB extends AbstractFacade<Groups>{
     
     @Override
     public Groups create(Groups group) throws PreexistingEntityException {
-        Groups existingGroup = null;
-        
-        if(group.getId()!= null) {
-            existingGroup = findById(group.getId());
-        } 
-        if(existingGroup == null) {  
-            existingGroup = findByEmail(group.getName());
-//            System.out.println("Found by name: " + existingGroup);
+               if (group.getName() != null && findByName(group.getName()) != null) {
+            throw new PreexistingEntityException("Group with name: "
+                    + group.getName() + " already exists.");
         }
-        if(existingGroup == null) {
-            existingGroup = super.create(group);
-        }
-//        System.out.println("To be set: " + existingGroup);
-        return existingGroup;
+        return super.create(group);
     }
 
-    public Groups findByEmail(String email) {
+    public Groups findByName(String name) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery criteriaQuery = builder.createQuery();
         Root<Groups> groupsRoot = criteriaQuery.from(Groups.class);
         criteriaQuery.where(builder.equal(
             groupsRoot.get(Groups_.name),  
-            builder.parameter(String.class, "email")));
+            builder.parameter(String.class, "name")));
         
         //Escaping "name" parameter automatically
-        Query query = em.createQuery(criteriaQuery).setParameter("email", email);
+        Query query = em.createQuery(criteriaQuery).setParameter("name", name);
         List<Groups> publishers = query.getResultList();
         if (publishers.size() > 0) {
             return publishers.get(0);
