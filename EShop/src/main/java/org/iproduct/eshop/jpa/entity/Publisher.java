@@ -116,7 +116,7 @@ public class Publisher implements Serializable, Identifiable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.id);
+        hash = 19 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -132,8 +132,10 @@ public class Publisher implements Serializable, Identifiable {
             return false;
         }
         final Publisher other = (Publisher) obj;
-        return true;
+        return Objects.equals(this.id, other.id);
     }
+
+    
 
     @Override
     public String toString() {

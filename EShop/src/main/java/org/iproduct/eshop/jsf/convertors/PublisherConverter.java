@@ -74,14 +74,14 @@ public class PublisherConverter implements Converter {
                     "Publisher with ID=" + publisherId + " not found.");
             throw new ConverterException(msg);
         }
-        System.out.println("!!! Conversion result: " + publisher);
+//        System.out.println("!!! Conversion result: " + publisher);
         return publisher;
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component,
             Object publisher) {
-        System.out.println("!!! Converted back to String: " + publisher);
+//        System.out.println("!!! Converted back to String: " + publisher);
         if (publisher != null && publisher instanceof Publisher) {
             return ((Publisher) publisher).getId().toString();
         } else {

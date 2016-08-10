@@ -74,7 +74,7 @@ public class PublisherEJB extends AbstractFacade<Publisher> {
         if (publisher.getId() != null) {
             existingPublisher = findById(publisher.getId());
         }
-        if (existingPublisher == null) {
+        if (existingPublisher == null && publisher.getName() != null) {
             existingPublisher = findByName(publisher.getName());
 //            System.out.println("Found by name: " + existingPublisher);
         }

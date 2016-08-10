@@ -37,7 +37,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Groups;
-import org.iproduct.eshop.jpa.entity.Groups;
 import org.iproduct.eshop.jpa.entity.Groups_;
 
 

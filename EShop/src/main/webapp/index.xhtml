@@ -9,6 +9,7 @@
         <ui:composition template="./template.xhtml">
 
             <ui:define name="content">
+                <h:messages globalOnly="true" style="color:green" errorStyle="color:red;" />
                 <ul class="book-list container">
                     <ui:repeat value="#{bookstore.books}" var="currentBook">
                         <li class="book row">
