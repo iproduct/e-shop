@@ -43,6 +43,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
@@ -50,6 +51,7 @@ import javax.validation.constraints.NotNull;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 @Entity
+@XmlRootElement
 public class Book implements Serializable, Identifiable {
     private static final long serialVersionUID = 1L;
     

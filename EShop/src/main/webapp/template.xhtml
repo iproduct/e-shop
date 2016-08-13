@@ -17,22 +17,29 @@
 
     <h:body>
         <ui:debug hotkey="x" rendered="#{initParam['javax.faces.PROJECT_STAGE']=='Development'}"/>
-        <div id="top" class="container">
-            <ui:insert name="top">
+        <div id="top-navigation" class="container">
+            <ui:insert name="navigation">
                 <ui:include src="navigation.xhtml" />
+            </ui:insert>
+        </div>
+
+        <div id="top-header" class="container">
+            <ui:insert name="header">
                 <ui:include src="header.xhtml" />
             </ui:insert>
         </div>
 
-        <div id="content" class="center_content">
+        <div id="content" class="container">
             <ui:insert name="content">Content</ui:insert>
         </div>
 
-        <div id="bottom">
-            <ui:insert name="bottom">
-                <ui:include src="footer.xhtml" />
-            </ui:insert>
-        </div>
+        <footer >
+            <div class="container">
+                <ui:insert name="bottom">
+                    <ui:include src="footer.xhtml" />
+                </ui:insert>
+            </div>
+        </footer>
 
     </h:body>
 

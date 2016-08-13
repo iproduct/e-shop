@@ -33,5 +33,5 @@ package org.iproduct.eshop.jpa.entity;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 public interface Identifiable {
-    Long getId();
+    Object getId();
 }

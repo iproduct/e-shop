@@ -39,6 +39,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * 
@@ -46,6 +48,7 @@ import javax.validation.constraints.NotNull;
  * @author Trayan Iliev, IPT [http://iproduct.org]
  */
 @Entity
+@XmlRootElement
 public class Publisher implements Serializable, Identifiable {
     private static final long serialVersionUID = 1L;
     
@@ -63,6 +66,7 @@ public class Publisher implements Serializable, Identifiable {
     private Long id;
 
     @OneToMany(targetEntity = Book.class, mappedBy = "publisher")
+    @XmlTransient
     private List<Book> books;
 
     @Column(unique = false, updatable = true, insertable = true, nullable = true, length = 255, scale = 0, precision = 0)
@@ -81,6 +85,7 @@ public class Publisher implements Serializable, Identifiable {
         this.url = url;
     }
 
+    @XmlTransient
     public List<Book> getBooks() {
         return this.books;
     }
@@ -97,6 +102,7 @@ public class Publisher implements Serializable, Identifiable {
         this.name = name;
     }
 
+    @Override
     public Long getId() {
         return this.id;
     }

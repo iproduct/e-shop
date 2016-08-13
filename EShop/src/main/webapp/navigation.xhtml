@@ -28,16 +28,24 @@
                         <h:form id="navigation">
                             <ul class="nav navbar-nav">
                                 <li class="#{navigation.getActiveClass('index')}">
-                                    <h:commandLink action="index" value="Home" /></li>
+                                    <h:commandLink action="/index?faces-redirect=true" value="Home" /></li>
                                 <li class="#{navigation.getActiveClass('add-book')}">
-                                    <h:commandLink action="add-book" value="Add Book" /></li>
+                                    <h:commandLink action="/add-book?faces-redirect=true" value="Add Book" /></li>
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Users <span class="caret"></span>
+                                    </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
+                                        <li class="#{navigation.getActiveClass('users')}">
+                                            <h:commandLink action="/admin/users?faces-redirect=true" value="List All Users" />
+                                        </li>
                                         <li role="separator" class="divider"></li>
+                                        <li class="#{navigation.getActiveClass('add-user')}">
+                                            <h:commandLink action="/admin/add-user?faces-redirect=true" value="Add New User" />
+                                        </li>
+
+                                        <li><a href="#">Something else here</a></li>
                                         <li><a href="#">Separated link</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#">One more separated link</a></li>
@@ -52,17 +60,28 @@
                             <button type="submit" class="btn btn-default">Submit</button>
                         </form>
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="#">Link</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </li>
+                            <h:form rendered="#{userController.logged}" class="navbar-form form-inline">
+                                <div class="form-group">
+                                    <h:commandButton rendered="#{userController.admin}" action="#{userController.goAdmin}"  
+                                                     value="Administration"  class="btn btn-default form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:commandButton action="#{userController.logout}" value="#{bundle.Topbar_Logout_Label}"
+                                                     class="btn btn-default form-control"/>
+                                    <h:outputText value=" #{bundle.Topbar_User_Label} #{userController.authenticatedUser.email}"  />
+                                </div>
+                            </h:form>
+
+                            <!-- <li class="dropdown">
+                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                                 <ul class="dropdown-menu">
+                                     <li><a href="#">Action</a></li>
+                                     <li><a href="#">Another action</a></li>
+                                     <li><a href="#">Something else here</a></li>
+                                     <li role="separator" class="divider"></li>
+                                     <li><a href="#">Separated link</a></li>
+                                 </ul>
+                             </li> -->
                         </ul>
 
                     </div><!-- /.navbar-collapse -->

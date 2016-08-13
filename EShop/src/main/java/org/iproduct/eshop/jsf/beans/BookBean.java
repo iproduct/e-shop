@@ -22,7 +22,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import org.iproduct.eshop.ejb.BookEJB;
 import org.iproduct.eshop.ejb.PublisherEJB;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
 import org.iproduct.eshop.jsf.utils.JsfUtils;
@@ -87,6 +87,7 @@ public class BookBean implements Serializable {
         } catch (PreexistingEntityException ex) {
             Logger.getLogger(BookBean.class.getName()).log(Level.SEVERE, null, ex);
             JsfUtils.addErrorMessage(ex.getMessage(), ex.getMessage());
+            return null;
         }
         return "index";
     }

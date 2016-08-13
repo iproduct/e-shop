@@ -18,3 +18,13 @@
 .author {
     margin-bottom: 5px;
 }
+
+.command-butttons input {
+    margin-right: 15px;
+}
+
+.alert {
+    list-style-type: none;
+    padding: 5px 10px;
+    margin: 10px 0;
+}

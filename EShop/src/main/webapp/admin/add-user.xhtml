@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="/template.xhtml">
+            <ui:define name="header">
+                <header class="page-header">
+                    <h1>Add New User</h1>
+                </header>
+            </ui:define>
+            <ui:define name="content">
+                <h:form id="add-book-form" class="form-horizontal">
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <h:messages for="add-book-form" fatalClass="alert alert-danger" errorClass="alert alert-danger" 
+                                    warnClass="alert alert-warning" infoClass="alert alert-success" layout="list"/>
+                    </h:panelGroup>
+                    
+                    <div class="form-group">
+                        <label for="firstname" class="control-label col-sm-2">First Name:</label>
+                        <div class="col-sm-10">
+                            <h:inputText label="Title" id="firstname" value="#{userBean.user.firstname}" class="form-control"
+                                         requiredMessage="User's first name is required.">
+                                <f:validateRequired />
+                            </h:inputText> 
+                            <h:message for="firstname" style="color:red;"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="isbn" class="control-label col-sm-2">ISBN:</label>
+                        <div class="col-sm-10">
+                            <h:inputText label="ISBN" id="isbn" value="#{bookBean.book.isbn}" class="form-control"
+                                         validatorMessage="Please provide valid ISBN - ex.: ISBN-13: XXX-XXXXXXXXXX or ISBN-10: XXXXXXXXXX">
+                                <f:validateRegex pattern="(\d{3}-)?\d{10}" />
+                            </h:inputText> 
+                            <h:message for="isbn" showDetail="true" showSummary="false" style="color:red;"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prive" class="control-label col-sm-2">Price:</label>
+                        <div class="col-sm-10">
+                            <h:inputText label="Price" id="price" value="#{bookBean.book.price}" class="form-control"
+                                         validatorMessage="Please provide valid price - ex.: 25.70">
+                                <f:validateDoubleRange minimum="0" maximum="1000" />
+                            </h:inputText> 
+                            <h:message for="price" showDetail="true" showSummary="false" style="color:red;"/>
+                        </div>
+                    </div>
+
+                    <!-- Publisher -->
+                    <div class="form-group">
+                        <label for="publisher" class="control-label col-sm-2">Publisher:</label>
+                        <div class="col-sm-8">
+                            <h:selectOneMenu label="Publisher" id="publisher" 
+                                             value="#{bookBean.book.publisher}" class="form-control"
+                                             requiredMessage="Please select a publisher or add a new one."
+                                             hideNoSelectionOption="true"  converter="#{publisherConverter}">
+                                <f:selectItem itemValue="#{null}" itemLabel="-- Please select a publisher --" noSelectionOption="true" />
+                                <f:selectItems value="#{bookstore.publishers}" var="p" itemValue="#{p}" itemLabel="#{p.name}" />
+                                <f:validateRequired />
+                            </h:selectOneMenu> 
+                            <h:message for="publisher" showDetail="true" showSummary="false" style="color:red;" />
+                        </div>
+
+                        <div class="col-sm-2">
+                            <h:commandButton immediate="true" action="#{bookBean.showPublisherForm}" 
+                                             value="Add Publisher" class="btn btn-default pull-right" />
+                        </div>
+                    </div>
+
+                    <!-- Authors -->
+                    <div class="form-group">
+                        <label for="author" class="control-label col-sm-2">Authors:</label>
+
+                        <c:forEach items="#{bookBean.book.authors}" var="author" varStatus="authorStatus">                                
+                            <div class="col-sm-10#{!authorStatus.first ? ' col-sm-offset-2':''}">
+                                <h:inputText label="Author" id="a#{authorStatus.index}" value="#{bookBean.book.authors[authorStatus.index]}" 
+                                             class="author form-control" requiredMessage="Please provide valid author name - e.g. John Smith">
+                                    <f:validateRequired />
+                                </h:inputText> 
+                                <h:message for="a#{authorStatus.index}" showDetail="true" showSummary="false" style="color:red;"/>
+                            </div>
+                        </c:forEach>
+
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <h:commandButton immediate="true" action="#{bookBean.addAuthor}" value="Add Author" class="btn btn-default"/>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="command-butttons col-sm-offset-2 col-sm-10">
+                            <h:commandButton action="#{userBean.addUser}" value="Save" class="btn btn-success" />
+                            <h:commandButton action="users" value="Cancel" immediate="true" class="btn btn-default" />
+                        </div>
+                    </div>
+
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -32,8 +32,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.exceptions.NonexistentEntityException;
+import org.iproduct.eshop.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Identifiable;
 
 /**
@@ -86,7 +86,7 @@ public abstract class AbstractFacade<T extends Identifiable> {
         return entity;
     }
     
-    public T findById(long entityId) {
+    public T findById(Object entityId) {
         return getEntityManager().find(entityClass, entityId);
     }
     
@@ -102,6 +102,7 @@ public abstract class AbstractFacade<T extends Identifiable> {
         EntityManager em = getEntityManager();
         CriteriaQuery criteriaQuery = getCriteriaBuilder().createQuery();
         Root<T> root = criteriaQuery.from(entityClass);
+        criteriaQuery.select( root );
         Query query  = em.createQuery(criteriaQuery);
          if (!all) {
                 query.setMaxResults(maxResults);

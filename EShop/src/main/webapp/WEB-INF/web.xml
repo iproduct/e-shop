@@ -4,6 +4,18 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.xhtml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -11,14 +23,59 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    
+    <!-- Added for Arquilian + embedded GF -->
+    <servlet>
+        <servlet-name>ArquillianServletRunner</servlet-name>
+        <servlet-class>org.jboss.arquillian.protocol.servlet.runner.ServletTestRunner</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ArquillianServletRunner</servlet-name>
+        <url-pattern>/ArquillianServletRunner</url-pattern>
+    </servlet-mapping>
+   
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>eshopRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/login.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secure Pages</web-resource-name>
+            <description/>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMINS</role-name>
+        </auth-constraint>
+    </security-constraint> 
+    
+    <data-source>
+        <name>java:global/eshop</name>
+        <class-name>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</class-name>
+        <server-name>localhost</server-name>
+        <port-number>3306</port-number>
+        <database-name>eshop</database-name>
+        <user>root</user>
+        <password>root</password>
+        <property>
+            <name>connectionAttributes</name>
+            <value>;create=true</value>
+        </property>
+    </data-source>
 </web-app>

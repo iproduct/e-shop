@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,10 +39,13 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import org.iproduct.eshop.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Groups;
 import org.iproduct.eshop.jpa.entity.Users;
 import org.iproduct.eshop.jpa.entity.Users_;
+import org.iproduct.eshop.jsf.utils.UserUtils;
 
 /**
  *
@@ -69,7 +73,40 @@ public class UserEJB extends AbstractFacade<Users> {
         return em;
     }
 
-    public Users createUser(Users user) throws PreexistingEntityException {
+    public void createUser(String fname, String lname, String email, String password, 
+            String city, String address, String[] groupNames) {
+        Users user = new Users(fname, lname, email, city, address);
+        for (String gName : groupNames) {
+            Groups group = groupController.findByName(gName);
+            if (group != null) {
+                user.getGroups().add(group);
+            }
+        }
+        user.setPassword(UserUtils.getMD5Hash(password));
+        try {
+            userController.create(user);
+        } catch (PreexistingEntityException ex) {
+            Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EJBException ex) {
+            Throwable cause = ex.getCause();
+            while (cause != null && !(cause instanceof ConstraintViolationException)) {
+                cause = cause.getCause();
+            }
+            if (cause instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) cause;
+                for (ConstraintViolation cv : cve.getConstraintViolations()) {
+                    Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE,
+                            "Constaint violation: {0}: {1}",
+                            new Object[]{cv.getMessage(), cv.getInvalidValue()});
+                }
+            } else {
+                Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    @Override
+    public Users create(Users user) throws PreexistingEntityException {
         if (user.getEmail() != null && findByEmail(user.getEmail()) != null) {
             throw new PreexistingEntityException("User with email: "
                     + user.getEmail() + " already exists.");
@@ -79,10 +116,12 @@ public class UserEJB extends AbstractFacade<Users> {
             Groups foundGroup = groupController.findById(group.getId());
             if (foundGroup != null) {
                 existingGroups.add(foundGroup);
+
             } else {
-                Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, 
-                        "Group {0} does not exist when creating user {1}", 
-                        new Object[]{group, user});
+                Logger.getLogger(UserEJB.class
+                        .getName()).log(Level.SEVERE,
+                                "Group {0} does not exist when creating user {1}",
+                                new Object[]{group, user});
 //                throw new NonexistentEntityException("Group " 
 //                        + group.getId() + ":" + group.getName() 
 //                        + " does not exist when creating user "
@@ -107,8 +146,10 @@ public class UserEJB extends AbstractFacade<Users> {
         if (existingUser == null) {
             try {
                 existingUser = super.create(user);
+
             } catch (PreexistingEntityException ex) {
-                Logger.getLogger(UserEJB.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UserEJB.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 //        System.out.println("To be set: " + existingUser);
@@ -118,10 +159,12 @@ public class UserEJB extends AbstractFacade<Users> {
     public Users findByEmail(String email) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery criteriaQuery = builder.createQuery();
-        Root<Users> usersRoot = criteriaQuery.from(Users.class);
-        criteriaQuery.where(builder.equal(
-                usersRoot.get(Users_.email),
-                builder.parameter(String.class, "email")));
+        Root<Users> usersRoot = criteriaQuery.from(Users.class
+        );
+        criteriaQuery
+                .where(builder.equal(
+                        usersRoot.get(Users_.email),
+                        builder.parameter(String.class, "email")));
 
         //Escaping "name" parameter automatically
         Query query = em.createQuery(criteriaQuery).setParameter("email", email);

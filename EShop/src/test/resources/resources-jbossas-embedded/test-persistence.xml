@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+        http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="test" transaction-type="JTA">
+        <jta-data-source>jdbc/arquillian</jta-data-source>
+        <class>org.iproduct.eshop.jpa.entity.Book</class>
+        <class>org.iproduct.eshop.jpa.entity.Publisher</class>
+        <class>org.iproduct.eshop.jpa.entity.Admin</class>
+        <class>org.iproduct.eshop.jpa.entity.Customer</class>
+        <class>org.iproduct.eshop.jpa.entity.Groups</class>
+        <class>org.iproduct.eshop.jpa.entity.OrderDetail</class>
+        <class>org.iproduct.eshop.jpa.entity.Orders</class>
+        <class>org.iproduct.eshop.jpa.entity.Seller</class>
+        <class>org.iproduct.eshop.jpa.entity.Users</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

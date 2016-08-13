@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/template.xhtml">
+            <ui:define name="header">
+                <header class="page-header">
+                    <h1>EShop Users</h1>
+                </header>
+            </ui:define>
+            <ui:define name="content">
+                <h:form styleClass="users row">
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <h:messages fatalClass="alert alert-danger" errorClass="alert alert-danger" 
+                                    warnClass="alert alert-warning" infoClass="alert alert-success" layout="list"/>
+                    </h:panelGroup>
+                    
+                    <h:outputText escape="false" value="No users are currently registered." rendered="#{empty userAdmin.users}"/>
+                    <h:panelGroup rendered="#{not empty userAdmin.users}">
+                        <ui:remove> <h:outputText value="#{customerController.pagination.pageFirstItem + 1}..#{customerController.pagination.pageLastItem + 1}/#{customerController.pagination.itemsCount}"/>&nbsp;
+                            <h:commandLink action="#{customerController.previous}" value="#{bundle.Previous} #{customerController.pagination.pageSize}" rendered="#{customerController.pagination.hasPreviousPage}"/>&nbsp;
+                            <h:commandLink action="#{customerController.next}" value="#{bundle.Next} #{customerController.pagination.pageSize}" rendered="#{customerController.pagination.hasNextPage}"/>&nbsp;
+                        </ui:remove>
+                        <h:dataTable value="#{userAdmin.users}" var="user" styleClass="table table-striped table-bordered table-hover">
+                            <h:column>
+                                <f:facet name="header">
+                                    Email
+                                </f:facet>
+                                <h:outputText value="#{user.email}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Name
+                                </f:facet>
+                                <h:outputText value="#{user.firstname} #{user.lastname}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Groups
+                                </f:facet>
+                                <ui:repeat value="#{user.groups}" var="group" varStatus="groupSatus">
+                                    <span>
+                                        <h:outputText escape="true" value="#{group.name}#{ (!groupSatus.last) ? ', ' : '' }" />
+                                    </span>
+                                </ui:repeat>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    City
+                                </f:facet>
+                                <h:outputText value="#{user.city}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    Address
+                                </f:facet>
+                                <h:outputText value="#{user.address}"/>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="&nbsp;"/>
+                                </f:facet>
+                                <ui:remove><h:commandLink action="#{customerController.prepareView}" value="#{bundle.ListCustomerViewLink}"/>
+                                    <h:outputText value=" "/>
+                                    <h:commandLink action="#{customerController.prepareEdit}" value="#{bundle.ListCustomerEditLink}"/>
+                                    <h:outputText value=" "/>
+                                    <h:commandLink action="#{customerController.destroy}" value="#{bundle.ListCustomerDestroyLink}"/>
+                                </ui:remove>
+                            </h:column>
+                        </h:dataTable>
+                    </h:panelGroup>
+                    <h:panelGrid id="commandButtons"  styleClass="commandButtons" columns="5" cellpadding="5" cellspacing="10">
+                        <ui:remove> <h:commandLink action="#{customerController.prepareCreate}" value="#{bundle.ListCustomerCreateLink}"/>
+                            <h:commandLink value="#{bundle.ListCustomerIndexLink}" action="/index" immediate="true" />
+                        </ui:remove>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+            <ui:remove> <ui:define name="content">
+                    <h:messages globalOnly="true" style="color:green" errorStyle="color:red;" />
+                    <ul class="book-list container">
+                        <ui:repeat value="#{userAdmin.users}" var="currentUser">
+                            <li class="user row">
+                                <div class="user-data col-xs-12 col-sm-8 col-md-9 col-lg-10">
+                                    <h3 class="email">
+                                        <a href="#">
+                                            <h:outputText escape="true" value="#{currentUser.email}" />
+                                        </a>
+                                    </h3>
+                                    <div class="name">
+                                        Name: <h:outputText escape="true" value="#{currentUser.firstname} #{currentUser.lastname}" /> 
+                                    </div>
+
+                                    <div class="groups">
+                                        User Groups:
+                                        <ui:repeat value="#{currentUser.groups}" var="group" varStatus="groupSatus">
+                                            <span>
+                                                <h:outputText escape="true" value="#{group.name}#{ (!groupSatus.last) ? ', ' : '' }" />
+                                            </span>
+                                        </ui:repeat>
+                                    </div>
+                                    <div class="city">
+                                        City: <h:outputText escape="true" value="#{currentUser.city}" /> 
+                                    </div>
+                                    <div class='description'>
+                                        Address: <h:outputText escape="true" value="#{currentUser.address}" /> 
+                                    </div>
+                                </div>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </ui:define>
+            </ui:remove>
+
+        </ui:composition>
+
+    </body>
+</html>

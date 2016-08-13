@@ -1,4 +1,4 @@
-package org.iproduct.eshop.jpa.controller.exceptions;
+package org.iproduct.eshop.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

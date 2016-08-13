@@ -1,4 +1,4 @@
-package org.iproduct.eshop.jpa.controller.exceptions;
+package org.iproduct.eshop.exceptions;
 
 public class PreexistingEntityException extends Exception {
     public PreexistingEntityException(String message, Throwable cause) {

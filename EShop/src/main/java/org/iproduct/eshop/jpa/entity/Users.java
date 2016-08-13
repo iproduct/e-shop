@@ -72,7 +72,7 @@ public class Users implements Serializable, Identifiable {
     @JoinTable(name = "USERS_GROUPS", joinColumns = {
         @JoinColumn(name = "EMAIL", referencedColumnName = "EMAIL")}, inverseJoinColumns = {
         @JoinColumn(name = "GROUPS_ID", referencedColumnName = "ID")})
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     protected List<Groups> groups = new ArrayList<>();
     
     @Basic(optional = false)

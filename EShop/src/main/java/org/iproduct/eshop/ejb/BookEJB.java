@@ -30,7 +30,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
 

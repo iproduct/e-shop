@@ -9,8 +9,11 @@
         <ui:composition template="./template.xhtml">
 
             <ui:define name="content">
-                <h:messages globalOnly="true" style="color:green" errorStyle="color:red;" />
-                <ul class="book-list container">
+                <h:panelGroup id="messagePanel" layout="block">
+                    <h:messages fatalClass="alert alert-danger" errorClass="alert alert-danger" 
+                                warnClass="alert alert-warning" infoClass="alert alert-success" layout="list"/>
+                </h:panelGroup>
+                <ul class="book-list">
                     <ui:repeat value="#{bookstore.books}" var="currentBook">
                         <li class="book row">
                             <h:graphicImage class="title-page-image col-xs-12 col-sm-4 col-md-3 col-lg-2 img-responsive"
@@ -45,7 +48,7 @@
                     </ui:repeat>
                 </ul>
             </ui:define>
-            
+
         </ui:composition>
 
     </body>

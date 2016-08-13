@@ -33,8 +33,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.UserTransaction;
-import org.iproduct.eshop.jpa.controller.exceptions.NonexistentEntityException;
-import org.iproduct.eshop.jpa.controller.exceptions.RollbackFailureException;
+import org.iproduct.eshop.exceptions.NonexistentEntityException;
+import org.iproduct.eshop.exceptions.RollbackFailureException;
 import org.iproduct.eshop.jpa.entity.Publisher;
 
 

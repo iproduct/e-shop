@@ -1,4 +1,4 @@
-package org.iproduct.eshop.jpa.controller.exceptions;
+package org.iproduct.eshop.exceptions;
 
 public class RollbackFailureException extends Exception {
     public RollbackFailureException(String message, Throwable cause) {

@@ -1,4 +1,4 @@
-package org.iproduct.eshop.jpa.controller.exceptions;
+package org.iproduct.eshop.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

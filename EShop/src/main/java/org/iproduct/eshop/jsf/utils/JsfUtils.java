@@ -37,6 +37,18 @@ import javax.faces.context.FacesContext;
  */
 
 public class JsfUtils {
+    public static void addSuccessMessage(String message) {
+        addSuccessMessage(message, message);
+    }
+            
+    public static void addWarningMessage(String message) {
+        addWarningMessage(message, message);
+    }
+            
+    public static void addErrorMessage(String message) {
+        addErrorMessage(message, message);
+    }
+    
     public static void addSuccessMessage(String summary, String detail) {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -49,7 +61,7 @@ public class JsfUtils {
             
     public static void addErrorMessage(String summary, String detail) {
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("add-book-form", msg);
     }
             
 }

@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.iproduct.eshop.jpa.controller.exceptions.PreexistingEntityException;
+import org.iproduct.eshop.exceptions.PreexistingEntityException;
 import org.iproduct.eshop.jpa.entity.Groups;
 import org.iproduct.eshop.jpa.entity.Users;
 import org.iproduct.eshop.jsf.utils.UserUtils;
@@ -55,9 +55,9 @@ public class EShopBootstrap {
 
         if (groupController.getCount() == 0) {
             Groups[] defaultGroups = {
-                new Groups("Customers", "EShop customers."),
-                new Groups("Sellers", "EShop sellers."),
-                new Groups("Admins", "EShop admins."),};
+                new Groups("CUSTOMERS", "EShop customers."),
+                new Groups("SELLERS", "EShop sellers."),
+                new Groups("ADMINS", "EShop admins."),};
             for (Groups g : defaultGroups) {
                 try {
                     groupController.create(g);
@@ -67,30 +67,12 @@ public class EShopBootstrap {
             }
         }
         if (userController.getCount() == 0) {
-            Users adminUser = new Users("Admin", "Admin", "admin@eshop.com", "Sofia", "Sofia");
-            Groups adminGroup = groupController.findByName("Admins");
-            if (adminGroup != null) {
-                adminUser.getGroups().add(adminGroup);
-                adminUser.setPassword(UserUtils.getMD5Hash("admin"));
-                try {
-                    userController.create(adminUser);
-                } catch (PreexistingEntityException ex) {
-                    Logger.getLogger(EShopBootstrap.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (EJBException ex) {
-                    Throwable cause = ex.getCause();
-                    while(cause != null && !(cause instanceof ConstraintViolationException)) {
-                        cause = cause.getCause();
-                    }
-                    if (cause instanceof ConstraintViolationException){
-                    ConstraintViolationException cve = (ConstraintViolationException) cause;
-                        for (ConstraintViolation cv : cve.getConstraintViolations()) {
-                            Logger.getLogger(EShopBootstrap.class.getName()).log(Level.SEVERE,
-                                "Constaint violation: {0}: {1}", 
-                                new Object[]{cv.getMessage(), cv.getInvalidValue()} );
-                        }
-                    }
-                }
-            }
+            userController.createUser("Super", "Admin", "admin@eshop.com", 
+                    "admin", "Sofia", "Sofia", new String[]{"ADMINS"});
+            userController.createUser("Default", "Seller", "seller@eshop.com", 
+                    "seller", "Sofia", "Sofia", new String[]{"SELLERS"});
+            userController.createUser("Default", "Customer", "customer@eshop.com", 
+                    "customer", "Sofia", "Sofia", new String[]{"CUSTOMERS"});
         }
 
 //        System.out.println("\nBooks:");

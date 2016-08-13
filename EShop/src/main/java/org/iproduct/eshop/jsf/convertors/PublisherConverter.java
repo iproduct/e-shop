@@ -57,7 +57,7 @@ public class PublisherConverter implements Converter {
         }
         
         Long publisherId = null;
-        System.out.println("!!! Publisher converted: " + publisherIdStr);
+//        System.out.println("!!! Publisher converted: " + publisherIdStr);
         try {
             publisherId = Long.valueOf(publisherIdStr);
         } catch (NumberFormatException ex) {
