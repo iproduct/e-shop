@@ -19,11 +19,11 @@ import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.iproduct.eshop.jpa.entity.Book;
 import org.iproduct.eshop.jpa.entity.Publisher;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import static org.unitils.reflectionassert.ReflectionAssert.*;
 
 public class BookResourceTest {
 
